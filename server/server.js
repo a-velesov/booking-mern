@@ -2,15 +2,35 @@ import express from 'express';
 import { readdirSync } from 'fs';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import mongoose from 'mongoose';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.APP_PORT || 8000;
+const dbUrl = process.env.DB_URL;
 
 app.use(morgan('dev'));
+app.use(cors());
 
 readdirSync('./routes').map((r) =>
   app.use('/api', require(`./routes/${r}`)));
 
-app.listen(port, () => console.log('Server running ', port))
+async function startApp() {
+  try {
+    await mongoose.connect(dbUrl,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        useFindAndModify: false,
+      });
+    app.listen(port,
+      () => console.log('server start ' + port));
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+startApp();
