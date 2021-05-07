@@ -6,14 +6,15 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^9.0.0",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
+    "mongoose": "^5.12.7",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.7",
-    "mongoose": "^5.12.7"
+    "nodemon": "^2.0.7"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:server": "nodemon -r esm server.js"
   },
   "keywords": [],
   "author": "",
