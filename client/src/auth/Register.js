@@ -8,21 +8,21 @@ const Register = ({ history }) => {
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post('http://localhost:5000/api/register', {
-        name,
-        email,
-        password,
+    axios.post(`${process.env.REACT_APP_API}/register`, {
+      name,
+      email,
+      password,
+    })
+      .then(() => {
+        toast.success('Register success');
+        history.push('/login');
+      })
+      .catch((err) => {
+        if(err.response.status === 400) toast.error(err.response.data);
       });
-      toast.success('Register success');
-      history.push('/login');
-    } catch(err) {
-      if(err.response.status === 400) toast.error(err.response.data);
-    }
   };
-
   return (
     <>
       <div className="container-fluid bg-secondary p-5 text-center">
