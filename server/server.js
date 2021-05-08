@@ -13,9 +13,10 @@ const dbUrl = process.env.DB_URL;
 
 app.use(morgan('dev'));
 app.use(cors());
+app.use(express.json());
 
 readdirSync('./routes').map((r) =>
-  app.use('/api', require(`./routes/${r}`)));
+  app.use('/api', require(`./routes/${ r }`)));
 
 async function startApp() {
   try {
@@ -28,7 +29,7 @@ async function startApp() {
       });
     app.listen(port,
       () => console.log('server start ' + port));
-  } catch (e) {
+  } catch(e) {
     console.log(e);
   }
 }
