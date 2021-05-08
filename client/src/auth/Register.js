@@ -1,23 +1,25 @@
 import { useState } from 'react';
 import RegisterForm from '../components/RegisterForm';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const Register = () => {
+const Register = ({ history }) => {
   const [ name, setName ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/api/register', {
         name,
         email,
         password,
-      })
-      console.log(res, 'res');
-    } catch(e) {
-      console.log(e);
+      });
+      toast.success('Register success');
+      history.push('/login');
+    } catch(err) {
+      if(err.response.status === 400) toast.error(err.response.data);
     }
   };
 
