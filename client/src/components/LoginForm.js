@@ -1,22 +1,11 @@
-const RegisterForm = ({
+const LoginForm = ({
   handleSubmit,
-  name,
-  setName,
   email,
   setEmail,
   password,
   setPassword,
 }) => (
   <form onSubmit={ handleSubmit } className="mt-3">
-    <div className="form-group mb-3">
-      <label className="form-label">Your Name</label>
-      <input type="text"
-             className="form-control"
-             placeholder="Enter name"
-             value={ name }
-             onChange={ e => setName(e.target.value) }
-      />
-    </div>
     <div className="form-group mb-3">
       <label className="form-label">Your Email</label>
       <input type="email"
@@ -43,4 +32,4 @@ const RegisterForm = ({
   </form>
 );
 
-export default RegisterForm;
+export default LoginForm;
