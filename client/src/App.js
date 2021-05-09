@@ -8,6 +8,7 @@ import Login from './auth/Login';
 import Register from './auth/Register';
 import Dashboard from './user/Dashboard';
 import DashboardSeller from './user/DashboardSeller';
+import NewHotel from './hotels/NewHotel';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route exact path="/register" component={ Register } />
         <PrivateRoute exact path="/dashboard" component={ Dashboard } />
         <PrivateRoute exact path="/dashboard/seller" component={ DashboardSeller } />
+        <PrivateRoute exact path="/hotels/new" component={ NewHotel } />
       </Switch>
     </BrowserRouter>
   );
