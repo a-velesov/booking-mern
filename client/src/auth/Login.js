@@ -2,10 +2,13 @@ import { useState } from 'react';
 import LoginForm from '../components/LoginForm';
 import { login } from '../state/actions/auth';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 
-const Login = () => {
+const Login = ({history}) => {
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -15,11 +18,17 @@ const Login = () => {
         email,
         password,
       });
-      if (res.data) {
-        console.log(res.data);
+
+      if(res.data) {
+        window.localStorage.setItem('auth', JSON.stringify(res.data));
+        dispatch({
+          type: 'LOGIN',
+          payload: res.data,
+        })
       }
+      history.push('/');
     } catch(err) {
-        toast.error(err.response.data);
+      toast.error(err.response.data);
     }
   };
 
