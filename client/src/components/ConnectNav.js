@@ -13,9 +13,9 @@ const ConnectNav = () => {
     <div className="d-flex justify-content-around">
       <Card>
         <Meta
-          avatar={user.name[0]}
-          title={user.name}
-          description={`Joined ${date}`}
+          avatar={ <Avatar>{ user.name[0] }</Avatar> }
+          title={ user.name }
+          description={ `Joined ${ date }` }
         />
       </Card>
     </div>
