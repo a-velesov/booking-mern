@@ -8,7 +8,7 @@ export const create = async(req, res) => {
 
     let hotel = new Hotel(fields);
 
-    if(files) {
+    if(files.image) {
       hotel.image.data = fs.readFileSync(files.image.path);
       hotel.image.contentType = files.image.type;
     }
