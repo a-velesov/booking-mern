@@ -26,3 +26,12 @@ export const create = async(req, res) => {
     });
   }
 };
+
+export const hotels = async (req, res) => {
+  let all = await Hotel.find({})
+    .limit(10)
+    .select('-image.data')
+    .populate('postedBy', '_id name')
+    .exec();
+  res.json(all);
+}
