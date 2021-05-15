@@ -63,12 +63,18 @@ const HotelCreateForm = ({ setPreview }) => {
     hotelData.append('to', to);
     hotelData.append('bed', bed);
 
-    console.log([ ...hotelData ]);
+    try {
+      await createHotel(token, hotelData);
 
-    let res = await createHotel(token, hotelData);
-    console.log('HOTEL CREATE RES', res);
+      toast.success('New hotel is posted');
 
-    toast('New hotel is posted');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+
+    } catch(err) {
+      toast.error(err.response.data);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -188,16 +194,16 @@ const HotelCreateForm = ({ setPreview }) => {
           size="large"
           placeholder="Number of beds"
         >
-          <Option key={ 1 }>
+          <Option value={ 1 }>
             1
           </Option>
-          <Option key={ 2 }>
+          <Option value={ 2 }>
             2
           </Option>
-          <Option key={ 3 }>
+          <Option value={ 3 }>
             3
           </Option>
-          <Option key={ 4 }>
+          <Option value={ 4 }>
             4
           </Option>
         </Select>
