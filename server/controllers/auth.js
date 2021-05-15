@@ -2,20 +2,21 @@ import User from '../models/user';
 import jwt from 'jsonwebtoken';
 
 export const register = async(req, res) => {
-  const {
-          email,
-          password,
-        } = req.body;
-
-  if(!email) return res.status(400).send('Email is required');
-  if(!password || password.length < 6) return res.status(400)
-    .send('Password is required and shoild be min 6 characters long');
-
-  let userExist = await User.findOne({ email }).exec();
-  if(userExist) return res.status(400).send('Email is taken');
-
-  const user = new User(req.body);
   try {
+    const {
+            email,
+            password,
+          } = req.body;
+
+    if(!email) return res.status(400).send('Email is required');
+    if(!password || password.length < 6) return res.status(400)
+      .send('Password is required and shoild be min 6 characters long');
+
+    let userExist = await User.findOne({ email }).exec();
+    if(userExist) return res.status(400).send('Email is taken');
+
+    const user = new User(req.body);
+
     await user.save();
     return res.json({
       ok: true,

@@ -1,8 +1,24 @@
 import DashboardNav from '../components/DashboardNav';
 import ConnectNav from '../components/ConnectNav';
 import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { sellerHotels } from '../state/actions/hotel';
+import { useSelector } from 'react-redux';
+import SmallCard from '../components/cards/SmallCard';
 
 const DashboardSeller = () => {
+  const { auth } = useSelector((state) => ({ ...state }));
+  const [seller, setSeller] = useState([]);
+
+  useEffect(() => {
+    loadSellerHotels();
+  }, []);
+
+  const loadSellerHotels = async() => {
+    let { data } = await sellerHotels(auth.token);
+    setSeller(data);
+  };
+
   return (
     <>
       <div className="container-fluid bg-secondary p-5">
@@ -25,9 +41,22 @@ const DashboardSeller = () => {
             </Link>
           </div>
         </div>
+
+        <div className="row">
+          {
+            seller.map(s => (
+              <SmallCard
+                h={s}
+                key={s._id}
+                owner={true}
+                showViewMore={false}
+              />
+            ))
+          }
+        </div>
       </div>
     </>
-  )
+  );
 };
 
 export default DashboardSeller;
