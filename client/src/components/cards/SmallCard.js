@@ -6,12 +6,9 @@ const SmallCard = ({
   h,
   owner = false,
   showViewMore = true,
+  handleHotelDelete = (f) => f,
 }) => {
   const history = useHistory();
-
-  const handleHotelDelete = (id) => {
-    console.log(id);
-  };
 
   return (
     <>
