@@ -27,3 +27,7 @@ export const deleteHotel = async(token, hotelId) => {
     },
   });
 };
+
+export const getHotel = async(hotelId) => {
+  return await axios.get(`${ process.env.REACT_APP_API }/hotel/${ hotelId }`);
+};

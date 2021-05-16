@@ -1,19 +1,21 @@
 import { DebounceInput } from 'react-debounce-input';
-import { DatePicker, Select } from 'antd';
-import { format, subDays } from 'date-fns';
+import { Select } from 'antd';
+import { format, subDays, parseISO } from'date-fns';
 import { useClickOutside } from '../../hooks/useClickOutside';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fetchCities } from '../../api/placeSuggestion';
 import { useSelector } from 'react-redux';
 import { createHotel } from '../../state/actions/hotel';
 import { toast } from 'react-toastify';
+import DatePicker from '../../use/DatePicker';
 
 const { Option } = Select;
 
-const HotelCreateForm = ({ setPreview }) => {
+const HotelCreateForm = ({ setPreview, dataValue }) => {
 
   const suggestionRef = useRef(null);
   const [ suggestions, setSuggestions ] = useState([]);
+  const [ editForm, setEditForm ] = useState(false);
   const [ showSuggestions, setShowSuggestions ] = useState(false);
   const [ values, setValues ] = useState({
     title: '',
@@ -21,10 +23,21 @@ const HotelCreateForm = ({ setPreview }) => {
     location: '',
     image: '',
     price: '',
-    from: '',
-    to: '',
     bed: '',
+    to: format(new Date(), 'yyyy-MM-dd'),
+    from: format(new Date(), 'yyyy-MM-dd'),
   });
+
+  useEffect(() => {
+    setEditForm(true);
+
+    setValues({
+      ...values,
+      ...dataValue,
+    });
+  }, [dataValue]);
+
+  console.log({ values });
 
   const { auth } = useSelector((state) => ({ ...state }));
   const { token } = auth;
@@ -186,6 +199,7 @@ const HotelCreateForm = ({ setPreview }) => {
         />
 
         <Select
+          value={bed}
           onChange={ (value) => setValues({
             ...values,
             bed: value,
@@ -207,31 +221,41 @@ const HotelCreateForm = ({ setPreview }) => {
             4
           </Option>
         </Select>
-      </div>
 
-      <DatePicker
-        placeholder="From date"
-        className="form-control m-2"
-        disabledDate={ (current) => disabledDate(current) }
-        onChange={ (date, dateString) =>
-          setValues({
-            ...values,
-            from: dateString,
-          }) }
-      />
 
-      <DatePicker
-        placeholder="To date"
-        className="form-control m-2"
-        disabledDate={ (current) => disabledDate(current) }
-        onChange={ (date, dateString) =>
-          setValues({
-            ...values,
-            to: dateString,
-          }) }
-      />
-
+      {
+        from && (
+          <DatePicker
+            placeholder="From date"
+            defaultValue={parseISO(from)}
+            className="form-control m-2"
+            disabledDate={ (current) => disabledDate(current) }
+            onChange={ (date, dateString) => {
+              setValues({
+                ...values,
+                from: dateString,
+              });
+            } }
+          />
+        )
+      }
+      {
+        to && (
+          <DatePicker
+            defaultValue={parseISO(to)}
+            placeholder="To date"
+            className="form-control m-2"
+            disabledDate={ (current) => disabledDate(current) }
+            onChange={ (date, dateString) =>
+              setValues({
+                ...values,
+                to: dateString,
+              }) }
+          />
+        )
+      }
       <button className="btn btn-outline-primary m-2">Save</button>
+      </div>
     </form>
   );
 };

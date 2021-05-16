@@ -1,7 +1,7 @@
 import Hotel from '../models/hotel';
 import fs from 'fs';
 
-export const create = async(req, res) => {
+export const createHotel = async(req, res) => {
   try {
     let fields = req.fields;
     let files = req.files;
@@ -28,7 +28,7 @@ export const create = async(req, res) => {
   }
 };
 
-export const hotels = async(req, res) => {
+export const getHotels = async(req, res) => {
   try {
     let all = await Hotel.find({})
       .limit(10)
@@ -61,7 +61,14 @@ export const sellerHotels = async(req, res) => {
   res.send(all);
 };
 
-export const remove = async(req, res) => {
+export const deleteHotel = async(req, res) => {
   let removed = await Hotel.findByIdAndDelete(req.params.hotelId).exec();
   res.json(removed);
+};
+
+export const getHotel = async(req, res) => {
+  let hotel = await Hotel.findById(req.params.hotelId)
+    .select('-image.data')
+    .exec();
+  res.json(hotel);
 };
