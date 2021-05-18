@@ -5,7 +5,7 @@ import { useClickOutside } from '../../hooks/useClickOutside';
 import { useEffect, useRef, useState } from 'react';
 import { fetchCities } from '../../api/placeSuggestion';
 import { useSelector } from 'react-redux';
-import { createHotel } from '../../state/actions/hotel';
+import { createHotel, updateHotel } from '../../state/actions/hotel';
 import { toast } from 'react-toastify';
 import DatePicker from '../../use/DatePicker';
 
@@ -15,7 +15,6 @@ const HotelCreateForm = ({ setPreview, dataValue }) => {
 
   const suggestionRef = useRef(null);
   const [ suggestions, setSuggestions ] = useState([]);
-  const [ editForm, setEditForm ] = useState(false);
   const [ showSuggestions, setShowSuggestions ] = useState(false);
   const [ values, setValues ] = useState({
     title: '',
@@ -29,10 +28,7 @@ const HotelCreateForm = ({ setPreview, dataValue }) => {
   });
 
   useEffect(() => {
-    setEditForm(true);
-
     setValues({
-      ...values,
       ...dataValue,
     });
   }, [dataValue]);
@@ -77,10 +73,14 @@ const HotelCreateForm = ({ setPreview, dataValue }) => {
     hotelData.append('bed', bed);
 
     try {
+      if (dataValue) {
+        await updateHotel(token, hotelData, dataValue._id);
+        console.log(dataValue._id, 'dataValue._id');
+        toast.success('Hotel is uptated');
+        return;
+      }
       await createHotel(token, hotelData);
-
       toast.success('New hotel is posted');
-
       setTimeout(() => {
         window.location.reload();
       }, 1000);

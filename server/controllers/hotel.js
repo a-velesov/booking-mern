@@ -72,3 +72,28 @@ export const getHotel = async(req, res) => {
     .exec();
   res.json(hotel);
 };
+
+export const updateHotel = async(req, res) => {
+  try {
+    let fields = req.fields;
+    let files = req.files;
+
+    let data = { ...fields };
+
+    if(files.image) {
+      let image = {};
+      image.data = fs.readFileSync(files.image.path);
+      image.contentType = files.image.type;
+
+      data.image = image;
+    }
+
+    let updated = await Hotel.findByIdAndUpdate(req.params.hotelId, data, { new: true });
+    res.json(updated);
+
+  } catch(err) {
+    res.status(400).json({
+      err: err.message,
+    });
+  }
+};
