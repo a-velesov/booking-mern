@@ -16,7 +16,9 @@
     "morgan": "^1.10.0",
     "nodemon": "^2.0.7"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^15.6.0"
+  },
   "scripts": {
     "start:server": "nodemon -r esm server.js"
   },

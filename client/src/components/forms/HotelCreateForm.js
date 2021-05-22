@@ -33,8 +33,6 @@ const HotelCreateForm = ({ setPreview, dataValue }) => {
     });
   }, [dataValue]);
 
-  console.log({ values });
-
   const { auth } = useSelector((state) => ({ ...state }));
   const { token } = auth;
 
@@ -67,7 +65,7 @@ const HotelCreateForm = ({ setPreview, dataValue }) => {
     hotelData.append('content', content);
     hotelData.append('location', location);
     hotelData.append('price', price);
-    image && hotelData.append('image', image);
+    (image && !image.contentType) && hotelData.append('image', image);
     hotelData.append('from', from);
     hotelData.append('to', to);
     hotelData.append('bed', bed);
@@ -75,7 +73,6 @@ const HotelCreateForm = ({ setPreview, dataValue }) => {
     try {
       if (dataValue) {
         await updateHotel(token, hotelData, dataValue._id);
-        console.log(dataValue._id, 'dataValue._id');
         toast.success('Hotel is uptated');
         return;
       }
@@ -92,9 +89,14 @@ const HotelCreateForm = ({ setPreview, dataValue }) => {
 
   const handleImageChange = (e) => {
     setPreview(URL.createObjectURL(e.target.files[0]));
+    let imageValue = e.target.files[0];
+    if (!e.target.files[0]) {
+      imageValue = values.image;
+    }
+    console.log(imageValue, 'imageValue');
     setValues({
       ...values,
-      image: e.target.files[0],
+      image: imageValue,
     });
   };
 

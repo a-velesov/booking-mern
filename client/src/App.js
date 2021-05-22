@@ -10,6 +10,7 @@ import Dashboard from './user/Dashboard';
 import DashboardSeller from './user/DashboardSeller';
 import NewHotel from './hotels/NewHotel';
 import EditHotel from './hotels/EditHotel';
+import ViewHotel from './hotels/ViewHotel';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <PrivateRoute exact path="/dashboard/seller" component={ DashboardSeller } />
         <PrivateRoute exact path="/hotels/new" component={ NewHotel } />
         <PrivateRoute exact path="/hotel/edit/:hotelId" component={ EditHotel } />
+        <Route exact path="/hotel/:hotelId" component={ ViewHotel } />
       </Switch>
     </BrowserRouter>
   );
