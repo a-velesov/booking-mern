@@ -21,7 +21,7 @@ const SmallCard = ({
                   <img
                     src={ `${ process.env.REACT_APP_API }/hotel/image/${ h._id }` }
                     alt="hotel image"
-                    className="card-image img img-fluid"
+                    className="card-image w-100 img img-fluid"
                   />
                 )
                 : (
@@ -45,7 +45,7 @@ const SmallCard = ({
                 </span>
               </h3>
               <p className="alert alert-info">{ h.location }</p>
-              <p className="card-text">{ `${ h.content.substring(1, 200) }...` }</p>
+              <p className="card-text">{ `${ h.content.substring(0, 200) }...` }</p>
               <p className="card-text">{ h.bed } bed</p>
               <p className="card-text">
                 Available from { new Date(h.from).toLocaleDateString() }

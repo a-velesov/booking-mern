@@ -3,6 +3,7 @@ import { getHotel } from '../state/actions/hotel';
 import { format, formatDistance } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { Modal } from 'antd';
+import { orderSuccess } from '../state/actions/order';
 
 const ViewHotel = ({
   match,
@@ -12,6 +13,7 @@ const ViewHotel = ({
   const [ image, setImage ] = useState({});
 
   const { auth } = useSelector((state) => ({ ...state }));
+  const { token } = auth;
 
   useEffect(() => {
     loadSellerHotel();
@@ -30,14 +32,19 @@ const ViewHotel = ({
       history.push('/login');
       return;
     }
-    modalSuccess();
+    bookingSuccessHandler();
   };
 
-  const modalSuccess = () => {
-    Modal.success({
-      content: 'Hotel booked successfully',
+  const bookingSuccessHandler = () => {
+    orderSuccess(token, { hotelId: match.params.hotelId })
+      .then(() => {
+        Modal.success({
+          content: 'Hotel booked successfully',
+        });
+      }).catch((err) => {
+      console.log(err);
     });
-  }
+  };
 
   return (
     <>
@@ -46,12 +53,12 @@ const ViewHotel = ({
       </div>
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-4">
             <br />
-            <img src={ image } alt={ hotel.title } className="img img-fluid m-2" />
+            <img src={ image } alt={ hotel.title } className="img img-fluid m-2 w-100" />
           </div>
 
-          <div className="col-md-6">
+          <div className="col-md-8">
             <br />
             <b>{ hotel.content }</b>
             <p className="alert alert-info mt-3">${ hotel.price }</p>

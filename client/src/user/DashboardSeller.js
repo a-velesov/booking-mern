@@ -41,18 +41,18 @@ const DashboardSeller = () => {
 
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-10">
+          <div className="col-md-11">
             <h2>Your Hotels</h2>
           </div>
 
-          <div className="col-md-2">
+          <div>
             <Link to="/hotels/new" className="btn btn-primary">
               + Add new
             </Link>
           </div>
         </div>
 
-        <div className="row">
+        <div>
           {
             seller.map(s => (
               <SmallCard

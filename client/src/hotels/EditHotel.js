@@ -32,7 +32,7 @@ const EditHotel = ({ match }) => {
           <div className="col-md-2">
             <img src={ preview }
                  alt="preview_image"
-                 className="img img-fluid m-2"
+                 className="img img-fluid m-2 w-100"
             />
           </div>
         </div>

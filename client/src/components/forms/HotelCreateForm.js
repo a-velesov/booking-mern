@@ -11,7 +11,7 @@ import DatePicker from '../../use/DatePicker';
 
 const { Option } = Select;
 
-const HotelCreateForm = ({ setPreview, dataValue }) => {
+const HotelCreateForm = ({ setPreview, dataValue = null }) => {
 
   const suggestionRef = useRef(null);
   const [ suggestions, setSuggestions ] = useState([]);
@@ -28,6 +28,7 @@ const HotelCreateForm = ({ setPreview, dataValue }) => {
   });
 
   useEffect(() => {
+    if (!dataValue) return;
     setValues({
       ...dataValue,
     });
