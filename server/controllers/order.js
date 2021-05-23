@@ -2,7 +2,7 @@ import User from '../models/user';
 import Order from '../models/order';
 
 export const userHotelBookings = async(req, res) => {
-  const order = await Order.find({orderedBy: req.user._id})
+  const order = await Order.find({ orderedBy: req.user._id })
     .populate('hotel', '-image.data')
     .populate('orderedBy', '_id name')
     .exec();
@@ -36,4 +36,20 @@ export const bookingSuccess = async(req, res) => {
       err: err.message,
     });
   }
+};
+
+export const isAlreadyBooked = async(req, res) => {
+  const { hotelId } = req.params;
+  const userOrders = await Order.find({ orderedBy: req.user._id })
+    .select('hotel')
+    .exec();
+
+  let ids = [];
+  for(let i = 0; i < userOrders.length; i++) {
+    ids.push(userOrders[i].hotel.toString());
+  }
+
+  res.json({
+    ok: ids.includes(hotelId),
+  });
 };

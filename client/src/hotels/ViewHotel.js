@@ -3,7 +3,7 @@ import { getHotel } from '../state/actions/hotel';
 import { format, formatDistance } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { Modal } from 'antd';
-import { orderSuccess } from '../state/actions/order';
+import { isAlreadyBooked, orderSuccess } from '../state/actions/order';
 
 const ViewHotel = ({
   match,
@@ -11,6 +11,7 @@ const ViewHotel = ({
 }) => {
   const [ hotel, setHotel ] = useState({});
   const [ image, setImage ] = useState({});
+  const [ alreadyBooked, setAlreadyBooked ] = useState(false);
 
   const { auth } = useSelector((state) => ({ ...state }));
   const { token } = auth;
@@ -19,6 +20,14 @@ const ViewHotel = ({
     loadSellerHotel();
   }, []);
 
+  useEffect(() => {
+    if(auth && token) {
+      isAlreadyBooked(token, match.params.hotelId)
+        .then(res => {
+          if(res.data.ok) setAlreadyBooked(true);
+        });
+    }
+  }, []);
 
   const loadSellerHotel = async() => {
     let res = await getHotel(match.params.hotelId);
@@ -28,10 +37,12 @@ const ViewHotel = ({
 
   const handleClick = (e) => {
     e.preventDefault();
-    if(!auth) {
+
+    if(!token) {
       history.push('/login');
       return;
     }
+
     bookingSuccessHandler();
   };
 
@@ -79,9 +90,16 @@ const ViewHotel = ({
             <br />
             <button
               onClick={ handleClick }
+              disabled={ alreadyBooked }
               className="btn btn-lg btn-primary mt-3"
             >
-              { auth && auth.token ? 'Book Now' : 'Login to Book' }
+              {
+                alreadyBooked
+                  ? 'Already Booked'
+                  : auth && auth.token
+                  ? 'Book Now'
+                  : 'Login to Book'
+              }
             </button>
           </div>
         </div>

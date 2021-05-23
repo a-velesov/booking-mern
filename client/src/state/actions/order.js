@@ -7,8 +7,17 @@ export const orderSuccess = async (token, hotelId) => {
     },
   });
 }
+
 export const userHotelBookings = async (token) => {
   return await axios.get(`${ process.env.REACT_APP_API }/user-hotel-bookings`, {
+    headers: {
+      Authorization: `Bearer ${ token }`,
+    },
+  });
+}
+
+export const isAlreadyBooked = async (token, hotelId) => {
+  return await axios.get(`${ process.env.REACT_APP_API }/is-already-booked/${hotelId}`, {
     headers: {
       Authorization: `Bearer ${ token }`,
     },
