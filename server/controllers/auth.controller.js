@@ -59,7 +59,13 @@ export const logout = async (req, res) => {
 };
 
 export const activate = async (req, res) => {
-
+    try {
+        const activationLink = req.params.link;
+        await UserService.activate(activationLink);
+        return res.redirect(process.env.CLIENT_URL)
+    } catch (e) {
+        return res.status(400).send(e.message);
+    }
 };
 
 export const refresh = async (req, res) => {
