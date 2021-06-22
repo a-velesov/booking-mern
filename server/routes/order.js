@@ -1,6 +1,6 @@
 import express from 'express';
 import { requireSignin } from '../middlewares';
-import { bookingSuccess, userHotelBookings, isAlreadyBooked } from '../controllers/order';
+import { bookingSuccess, userHotelBookings, isAlreadyBooked } from '../controllers/order.controller';
 
 const router = express.Router();
 

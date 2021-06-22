@@ -1,8 +1,8 @@
 import expressJwt from 'express-jwt';
-import Hotel from '../models/hotel';
+import Hotel from '../models/hotel.model';
 
 export const requireSignin = expressJwt({
-  secret: process.env.JWT_SECRET,
+  secret: process.env.JWT_ACCESS_SECRET,
   algorithms: [ 'HS256' ],
 });
 

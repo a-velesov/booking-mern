@@ -2,6 +2,7 @@ import express from 'express';
 import { readdirSync } from 'fs';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
@@ -12,6 +13,7 @@ const port = process.env.APP_PORT || 8000;
 const dbUrl = process.env.DB_URL;
 
 app.use(morgan('dev'));
+app.use(cookieParser())
 app.use(cors());
 app.use(express.json());
 

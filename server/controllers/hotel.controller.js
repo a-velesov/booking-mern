@@ -1,4 +1,4 @@
-import Hotel from '../models/hotel';
+import Hotel from '../models/hotel.model';
 import fs from 'fs';
 
 export const createHotel = async(req, res) => {

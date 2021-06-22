@@ -1,5 +1,5 @@
 import express from 'express';
-import { createHotel, getHotels, image, getHotel, deleteHotel, sellerHotels, updateHotel } from '../controllers/hotel';
+import { createHotel, getHotels, image, getHotel, deleteHotel, sellerHotels, updateHotel } from '../controllers/hotel.controller';
 import formidable from 'express-formidable';
 import { hotelOwner, requireSignin } from '../middlewares';
 

@@ -1,5 +1,5 @@
-import User from '../models/user';
-import Order from '../models/order';
+import User from '../models/user.model';
+import Order from '../models/order.model';
 
 export const userHotelBookings = async(req, res) => {
   const order = await Order.find({ orderedBy: req.user._id })
