@@ -9,17 +9,13 @@ export const register = async (req, res) => {
             password,
         } = req.body;
 
-        if (!email) return res.status(400).send('Email is required');
-        if (!password || password.length < 6) return res.status(400)
-            .send('Password is required and shoild be min 6 characters long');
-
         const userData = await UserService.registration(email, password);
         res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true});
 
         return res.json(userData);
     } catch (err) {
         console.log('CREATE USER FAILED', err);
-        return res.status(400).send('Error. Try again.');
+        return res.status(400).send(err.message);
     }
 };
 
