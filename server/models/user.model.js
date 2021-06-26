@@ -1,33 +1,33 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 
-const {Schema} = mongoose;
+const { Schema } = mongoose;
 
 const userSchema = new Schema({
-        name: {
-            type: String,
-            trim: true,
-        },
-        email: {
-            type: String,
-            trim: true,
-            required: 'Email is required',
-            unique: true,
-        },
-        password: {
-            type: String,
-            required: true,
-            min: 6,
-        },
-        isActivated: {
-            type: Boolean,
-            default: false,
-        },
-        activationLink: {
-            type: String,
-        },
+    name: {
+      type: String,
+      trim: true,
     },
-    {timestamps: true});
+    email: {
+      type: String,
+      trim: true,
+      required: 'Email is required',
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      min: 6,
+    },
+    isActivated: {
+      type: Boolean,
+      default: false,
+    },
+    activationLink: {
+      type: String,
+    },
+  },
+  { timestamps: true });
 
 /**
  * While saving user, we need to make sure the password is hashed, not plain password
@@ -39,34 +39,22 @@ const userSchema = new Schema({
  * and/or password is modified/updated
  */
 
-userSchema.pre('save', function (next) {
-    let user = this;
+userSchema.pre('save', function(next) {
+  let user = this;
 
-    if (user.isModified('password')) {
-        return bcrypt.hash(user.password, 12,
-            (err, hash) => {
-                if (err) {
-                    console.log('BCRYPT HASH ERR', err);
-                    return next(err);
-                }
-                user.password = hash;
-                return next();
-            });
-    } else {
-        return next();
-    }
-});
-
-userSchema.methods.comparePassword = function (password, next) {
-    bcrypt.compare(password, this.password, function (err, match) {
-        if (err) {
-            console.log('COMPARE PASSWORD ERR', err);
-            return next(err);
+  if(user.isModified('password')) {
+    return bcrypt.hash(user.password, 12,
+      (err, hash) => {
+        if(err) {
+          console.log('BCRYPT HASH ERR', err);
+          return next(err);
         }
-
-        console.log('MATCH PASSWORD', match);
-        return next(null, match);
-    });
-};
+        user.password = hash;
+        return next();
+      });
+  } else {
+    return next();
+  }
+});
 
 export default mongoose.model('User', userSchema);

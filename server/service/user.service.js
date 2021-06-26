@@ -3,10 +3,11 @@ import {v4 as uuidv4} from 'uuid';
 import MailService from './mail.service';
 import TokenService from './token.service';
 import UserDto from '../dtos/user.dto';
+import bcrypt from 'bcrypt';
 
 class UserService {
     async registration(email, password) {
-        let userExist = await User.findOne({email}).exec();
+        let userExist = await User.findOne({email});
         if (userExist) throw new Error('Email is taken');
 
         const activationLink = uuidv4();
@@ -32,6 +33,42 @@ class UserService {
         }
         user.isActivated = true;
         await user.save();
+    }
+
+    async login(email, password) {
+        const user = await User.findOne({email});
+        if (!user) throw new Error('User with that email not found');
+
+        const isPasswordEquals = await bcrypt.compare(password, user.password);
+        if (!isPasswordEquals) throw new Error('Wrong password');
+
+        const userDto = new UserDto(user);
+        const tokens = TokenService.generateTokens({...userDto});
+        await TokenService.saveToken(userDto.id, tokens.refreshToken);
+        return {...tokens, user: userDto};
+
+    }
+
+    async logout(refreshToken) {
+        if (!refreshToken) throw new Error('Unauthorized');
+        const token = await TokenService.removeToken(refreshToken);
+        return token;
+    }
+
+    async refresh(refreshToken) {
+        if (!refreshToken) throw new Error('Unauthorized');
+
+        const userData = TokenService.validateRefreshToken(refreshToken);
+        const tokenFromDb = await TokenService.findToken(refreshToken);
+
+        if (!userData || !tokenFromDb) throw new Error('Unauthorized');
+
+        const user = await User.findById(userData.id);
+        const userDto = new UserDto(user);
+        const tokens = TokenService.generateTokens({...userDto});
+
+        await TokenService.saveToken(userDto.id, tokens.refreshToken);
+        return {...tokens, user: userDto};
     }
 }
 
