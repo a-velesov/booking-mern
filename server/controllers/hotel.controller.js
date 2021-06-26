@@ -1,10 +1,13 @@
 import Hotel from '../models/hotel.model';
 import fs from 'fs';
+import ApiError from '../dtos/error.dto';
 
-export const createHotel = async(req, res) => {
+export const createHotel = async(req, res, next) => {
   try {
     let fields = req.fields;
     let files = req.files;
+
+    console.log(fields, 'fields');
 
     let hotel = new Hotel(fields);
     hotel.postedBy = req.user._id;
@@ -16,19 +19,16 @@ export const createHotel = async(req, res) => {
 
     hotel.save((err, result) => {
       if(err) {
-        console.log('saving hotel err', err);
-        res.status(400).send('Error saving');
+        return res.status(400).send('Error saving');
       }
       res.json(result);
     });
   } catch(err) {
-    res.status(400).json({
-      err: err.message,
-    });
+    next(err);
   }
 };
 
-export const getHotels = async(req, res) => {
+export const getHotels = async(req, res, next) => {
   try {
     let all = await Hotel.find({})
       .limit(10)
@@ -37,9 +37,7 @@ export const getHotels = async(req, res) => {
       .exec();
     res.json(all);
   } catch(err) {
-    res.status(400).json({
-      err: err.message,
-    });
+    next(err);
   }
 };
 
@@ -74,7 +72,7 @@ export const getHotel = async(req, res) => {
   res.json(hotel);
 };
 
-export const updateHotel = async(req, res) => {
+export const updateHotel = async(req, res, next) => {
   try {
     let fields = req.fields;
     let files = req.files;
@@ -93,8 +91,6 @@ export const updateHotel = async(req, res) => {
     res.json(updated);
 
   } catch(err) {
-    res.status(400).json({
-      err: err.message,
-    });
+    next(err);
   }
 };

@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import {errorHandler} from './middlewares/index'
 
 dotenv.config();
 
@@ -14,12 +15,16 @@ const dbUrl = process.env.DB_URL;
 
 app.use(morgan('dev'));
 app.use(cookieParser())
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: process.env.CLIENT_URL
+}));
 app.use(express.json());
 
 readdirSync('./routes').map((r) =>
   app.use('/api', require(`./routes/${ r }`)));
 
+app.use(errorHandler);
 async function startApp() {
   try {
     await mongoose.connect(dbUrl,

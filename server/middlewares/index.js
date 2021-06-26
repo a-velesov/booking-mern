@@ -1,11 +1,28 @@
-import expressJwt from 'express-jwt';
 import Hotel from '../models/hotel.model';
+import TokenService from '../service/token.service';
 import {validationResult} from 'express-validator';
+import ApiError from '../dtos/error.dto';
 
-export const requireSignin = expressJwt({
-  secret: process.env.JWT_ACCESS_SECRET,
-  algorithms: [ 'HS256' ],
-});
+export const requireSignin = async(req, res, next) => {
+  try {
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader) {
+      return next(ApiError.UnauthorizedError());
+    }
+
+    const accessToken = authorizationHeader.split(' ')[1];
+    if(!accessToken) return next(ApiError.UnauthorizedError());
+
+    const userData = TokenService.validateAccessToken(accessToken);
+    if(!userData) return next(ApiError.UnauthorizedError());
+
+    req.user = userData;
+    next();
+
+  } catch(err) {
+    return next(ApiError.UnauthorizedError());
+  }
+};
 
 export const hotelOwner = async(req, res, next) => {
   let hotel = await Hotel.findById(req.params.hotelId).exec();
@@ -14,6 +31,14 @@ export const hotelOwner = async(req, res, next) => {
 
   next();
 };
+
+export const errorHandler = (err, req, res, next) => {
+  console.log(err);
+  if (err instanceof ApiError) {
+    return res.status(err.status).json({message: err.message, errors: err.errors})
+  }
+  return res.status(500).json({message: 'Непредвиденная ошибка'})
+}
 
 export const validationOutput = async (req, res, next) => {
   const errors = validationResult(req);

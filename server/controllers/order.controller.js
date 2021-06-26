@@ -10,12 +10,11 @@ export const userHotelBookings = async(req, res) => {
   res.json(order);
 };
 
-export const bookingSuccess = async(req, res) => {
+export const bookingSuccess = async(req, res, next) => {
   try {
     const { hotelId } = req.body;
 
     const user = await User.findById(req.user._id).exec();
-    // console.log("USER ==> ", user);
 
     const session = {};
 
@@ -32,9 +31,7 @@ export const bookingSuccess = async(req, res) => {
       res.json(result);
     });
   } catch(err) {
-    res.status(400).json({
-      err: err.message,
-    });
+    next(err);
   }
 };
 
