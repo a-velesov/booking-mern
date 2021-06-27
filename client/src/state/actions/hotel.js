@@ -1,42 +1,26 @@
-import axios from 'axios';
+import $api from '../../axios';
 
-export const createHotel = async(token, data) => {
-  return await axios.post(`${ process.env.REACT_APP_API }/create-hotel`, data, {
-    headers: {
-      Authorization: `Bearer ${ token }`,
-    },
-  });
+export const createHotel = async(data) => {
+  return await $api.post(`/create-hotel`, data);
 };
 
 export const allHotels = async() => {
-  return await axios.get(`${ process.env.REACT_APP_API }/hotels`);
+  return await $api.get(`/hotels`);
 };
 
-export const sellerHotels = async(token) => {
-  return await axios.get(`${ process.env.REACT_APP_API }/seller-hotels`, {
-    headers: {
-      Authorization: `Bearer ${ token }`,
-    },
-  });
+export const sellerHotels = async() => {
+  return await $api.get(`/seller-hotels`);
 };
 
-export const deleteHotel = async(token, hotelId) => {
-  return await axios.delete(`${ process.env.REACT_APP_API }/delete-hotel/${ hotelId }`, {
-    headers: {
-      Authorization: `Bearer ${ token }`,
-    },
-  });
+export const deleteHotel = async(hotelId) => {
+  return await $api.delete(`/delete-hotel/${ hotelId }`);
 };
 
 export const getHotel = async(hotelId) => {
-  return await axios.get(`${ process.env.REACT_APP_API }/hotel/${ hotelId }`);
+  return await $api.get(`/hotel/${ hotelId }`);
 };
 
-export const updateHotel = async(token, data, hotelId) => {
-  return await axios.put(`${ process.env.REACT_APP_API }/update-hotel/${ hotelId }`, data, {
-    headers: {
-      Authorization: `Bearer ${ token }`,
-    },
-  });
+export const updateHotel = async(data, hotelId) => {
+  return await $api.put(`/update-hotel/${ hotelId }`, data);
 };
 

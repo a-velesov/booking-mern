@@ -20,15 +20,18 @@ const Login = ({history}) => {
       });
 
       if(res.data) {
-        window.localStorage.setItem('auth', JSON.stringify(res.data));
+        localStorage.setItem('token', res.data.accessToken);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+
         dispatch({
           type: 'LOGIN',
-          payload: res.data,
+          payload: res.data.accessToken,
         })
       }
       history.push('/dashboard');
     } catch(err) {
-      toast.error(err.response.data);
+      console.log(err, 'err client');
+      toast.error(err);
     }
   };
 

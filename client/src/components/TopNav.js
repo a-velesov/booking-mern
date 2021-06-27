@@ -13,7 +13,9 @@ const TopNav = () => {
       payload: null,
     });
 
-    window.localStorage.removeItem('auth');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
     history.push('/login');
   };
 

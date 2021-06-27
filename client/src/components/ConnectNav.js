@@ -1,11 +1,9 @@
 import { Card, Avatar } from 'antd';
 import { formatDistance } from 'date-fns';
-import { useSelector } from 'react-redux';
 
 const ConnectNav = () => {
   const { Meta } = Card;
-  const { auth } = useSelector((state) => ({ ...state }));
-  const { user } = auth;
+  const user = JSON.parse(localStorage.getItem('user'));
   const date = formatDistance(new Date(user.createdAt), new Date(), { addSuffix: true });
 
 

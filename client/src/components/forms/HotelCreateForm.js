@@ -4,7 +4,6 @@ import { format, subDays, parseISO } from'date-fns';
 import { useClickOutside } from '../../hooks/useClickOutside';
 import { useEffect, useRef, useState } from 'react';
 import { fetchCities } from '../../api/placeSuggestion';
-import { useSelector } from 'react-redux';
 import { createHotel, updateHotel } from '../../state/actions/hotel';
 import { toast } from 'react-toastify';
 import DatePicker from '../../use/DatePicker';
@@ -33,9 +32,6 @@ const HotelCreateForm = ({ setPreview, dataValue = null }) => {
       ...dataValue,
     });
   }, [dataValue]);
-
-  const { auth } = useSelector((state) => ({ ...state }));
-  const { token } = auth;
 
   const {
           title,
@@ -73,18 +69,18 @@ const HotelCreateForm = ({ setPreview, dataValue = null }) => {
 
     try {
       if (dataValue) {
-        await updateHotel(token, hotelData, dataValue._id);
+        await updateHotel(hotelData, dataValue._id);
         toast.success('Hotel is uptated');
         return;
       }
-      await createHotel(token, hotelData);
+      await createHotel(hotelData);
       toast.success('New hotel is posted');
       setTimeout(() => {
         window.location.reload();
       }, 1000);
 
     } catch(err) {
-      toast.error(err.response.data);
+      toast.error(err);
     }
   };
 
@@ -94,7 +90,6 @@ const HotelCreateForm = ({ setPreview, dataValue = null }) => {
     if (!e.target.files[0]) {
       imageValue = values.image;
     }
-    console.log(imageValue, 'imageValue');
     setValues({
       ...values,
       image: imageValue,

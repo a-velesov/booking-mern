@@ -1,7 +1,10 @@
-import axios from 'axios';
+import $api from '../../axios';
 
 export const register = async (user) =>
-  await axios.post(`${process.env.REACT_APP_API}/register`, user);
+  await $api.post('/register', user);
 
 export const login = async (user) =>
-  await axios.post(`${process.env.REACT_APP_API}/login`, user);
+  await $api.post('/login', user);
+
+export const logout = async () =>
+  await $api.post('/logout');

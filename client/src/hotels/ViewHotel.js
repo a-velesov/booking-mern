@@ -14,15 +14,14 @@ const ViewHotel = ({
   const [ alreadyBooked, setAlreadyBooked ] = useState(false);
 
   const { auth } = useSelector((state) => ({ ...state }));
-  const { token } = auth;
 
   useEffect(() => {
     loadSellerHotel();
   }, []);
 
   useEffect(() => {
-    if(auth && token) {
-      isAlreadyBooked(token, match.params.hotelId)
+    if(auth) {
+      isAlreadyBooked(match.params.hotelId)
         .then(res => {
           if(res.data.ok) setAlreadyBooked(true);
         });
@@ -38,7 +37,7 @@ const ViewHotel = ({
   const handleClick = (e) => {
     e.preventDefault();
 
-    if(!token) {
+    if(!auth) {
       history.push('/login');
       return;
     }
@@ -47,7 +46,7 @@ const ViewHotel = ({
   };
 
   const bookingSuccessHandler = () => {
-    orderSuccess(token, { hotelId: match.params.hotelId })
+    orderSuccess({ hotelId: match.params.hotelId })
       .then(() => {
         Modal.success({
           content: 'Hotel booked successfully',
@@ -96,7 +95,7 @@ const ViewHotel = ({
               {
                 alreadyBooked
                   ? 'Already Booked'
-                  : auth && auth.token
+                  : auth
                   ? 'Book Now'
                   : 'Login to Book'
               }

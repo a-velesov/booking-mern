@@ -1,15 +1,15 @@
-let userState;
+let token;
 
-if(window.localStorage.getItem('auth')) {
-  userState = JSON.parse(window.localStorage.getItem('auth'));
+if(localStorage.getItem('token')) {
+  token = localStorage.getItem('token');
 } else {
-  userState = null;
+  token = null;
 }
 
-export const authReducer = (state = userState, action) => {
+export const authReducer = (state = token, action) => {
   switch(action.type) {
     case 'LOGIN':
-      return { ...state, ...action.payload };
+      return action.payload;
     case 'LOGOUT':
       return action.payload;
     default:

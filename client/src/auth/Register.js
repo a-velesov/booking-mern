@@ -17,7 +17,6 @@ const Register = ({ history }) => {
         email,
         password,
       });
-      console.log(res);
       toast.success('Register success');
       history.push('/login');
     } catch(err) {

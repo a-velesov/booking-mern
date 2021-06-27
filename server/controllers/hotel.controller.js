@@ -1,13 +1,10 @@
 import Hotel from '../models/hotel.model';
 import fs from 'fs';
-import ApiError from '../dtos/error.dto';
 
 export const createHotel = async(req, res, next) => {
   try {
     let fields = req.fields;
     let files = req.files;
-
-    console.log(fields, 'fields');
 
     let hotel = new Hotel(fields);
     hotel.postedBy = req.user._id;

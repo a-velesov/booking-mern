@@ -1,15 +1,11 @@
 import DashboardNav from '../components/DashboardNav';
 import ConnectNav from '../components/ConnectNav';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { userHotelBookings } from '../state/actions/order';
 import BookingCard from '../components/cards/BookingCard';
 
 const Dashboard = () => {
-
-  const { auth } = useSelector((state) => ({ ...state }));
-  const { token } = auth;
 
   const [ booking, setBooking ] = useState([]);
 
@@ -18,7 +14,7 @@ const Dashboard = () => {
   }, []);
 
   const loadUserBookings = async() => {
-    const res = await userHotelBookings(token);
+    const res = await userHotelBookings();
     setBooking(res.data);
   };
 
