@@ -37,15 +37,18 @@ export const errorHandler = (err, req, res, next) => {
   if (err instanceof ApiError) {
     return res.status(err.status).json({message: err.message, errors: err.errors})
   }
-  return res.status(500).json({message: 'Непредвиденная ошибка'})
+  return res.status(500).json({message: 'Internal Server Error'})
 }
 
 export const validationOutput = async (req, res, next) => {
-  const errors = validationResult(req);
+  const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
+    // Build your resulting errors however you want! String, object, whatever - it works!
+    return `${msg}`;
+  };
+  const errors = validationResult(req).formatWith(errorFormatter);
   if (!errors.isEmpty()) {
-    return res.status(400).json({
-      message: 'Error validation',
-      errors: errors.array(),
+    return res.status(422).json({
+      message: errors.mapped(),
     });
   }
   next();

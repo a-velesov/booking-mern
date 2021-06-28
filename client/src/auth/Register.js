@@ -1,29 +1,24 @@
 import { useState } from 'react';
 import RegisterForm from '../components/RegisterForm';
-import { toast } from 'react-toastify';
 import { register } from '../state/actions/auth';
+import { useDispatch } from 'react-redux';
 
 const Register = ({ history }) => {
   const [ name, setName ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
 
-  const handleSubmit = async(e) => {
+  const dispatch = useDispatch();
+
+  const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(register({
+      name,
+      email,
+      password,
+    }));
 
-    try {
-      const res = await register({
-        name,
-        email,
-        password,
-      });
-      toast.success('Register success');
-      history.push('/login');
-    } catch(err) {
-        toast.error(err.response.data);
-    }
   };
-
   return (
     <>
       <div className="container-fluid bg-secondary p-5 text-center">

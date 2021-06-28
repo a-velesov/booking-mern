@@ -1,22 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { logout } from '../state/actions/auth';
 
 const TopNav = () => {
   const dispatch = useDispatch();
-  const { auth } = useSelector((state) => ({ ...state }));
-  const history = useHistory();
+  const { authReducer } = useSelector((state) => ({ ...state }));
+  const { accessToken } = authReducer.data;
 
-  const logout = () => {
-    dispatch({
-      type: 'LOGOUT',
-      payload: null,
-    });
-
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-
-    history.push('/login');
+  const logoutHandler = () => {
+    dispatch(logout());
   };
 
   return (
@@ -26,16 +18,16 @@ const TopNav = () => {
       </Link>
 
       {
-        auth !== null && (
+        accessToken && (
           <Link className="nav-link" to="/dashboard">
             Dashboard
           </Link>
         )
       }
       {
-        auth !== null && (
+        accessToken && (
           <a className="nav-link pointer"
-             onClick={ logout }
+             onClick={ logoutHandler }
           >
             Logout
           </a>
@@ -43,7 +35,7 @@ const TopNav = () => {
       }
 
       {
-        auth === null && (
+        !accessToken && (
           <>
             <Link className="nav-link" to="/login">
               Login

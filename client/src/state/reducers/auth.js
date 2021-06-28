@@ -1,17 +1,33 @@
-let token;
+let initialState = {
+  data: {},
+  error: null,
+};
 
-if(localStorage.getItem('token')) {
-  token = localStorage.getItem('token');
+if(localStorage.getItem('auth')) {
+  initialState.data = JSON.parse(localStorage.getItem('auth'));
 } else {
-  token = null;
+  initialState.data = {};
 }
 
-export const authReducer = (state = token, action) => {
+const authFail = (state, action) => {
+  return {
+    ...state,
+    error: action.error,
+  };
+}
+
+export const authReducer = (state = initialState, action) => {
   switch(action.type) {
     case 'LOGIN':
-      return action.payload;
+      return {
+        ...state,
+        data: action.payload,
+        error: null,
+      };
+    case 'AUTH_FAIL':
+      return authFail(state, action);
     case 'LOGOUT':
-      return action.payload;
+      return initialState;
     default:
       return state;
   }

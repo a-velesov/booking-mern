@@ -1,20 +1,26 @@
 import { Card, Avatar } from 'antd';
 import { formatDistance } from 'date-fns';
+import { useSelector } from 'react-redux';
 
 const ConnectNav = () => {
-  const { Meta } = Card;
-  const user = JSON.parse(localStorage.getItem('user'));
-  const date = formatDistance(new Date(user.createdAt), new Date(), { addSuffix: true });
 
+  const { Meta } = Card;
+  const { authReducer } = useSelector((state) => ({ ...state }));
+  const { user } = authReducer.data;
+  const date = formatDistance(new Date(user.createdAt), new Date(), { addSuffix: true });
 
   return (
     <div className="d-flex justify-content-around">
       <Card>
-        <Meta
-          avatar={ <Avatar>{ user.name[0] }</Avatar> }
-          title={ user.name }
-          description={ `Joined ${ date }` }
-        />
+        {
+          user && (
+            <Meta
+              avatar={ <Avatar>{ user.name?.[0] }</Avatar> }
+              title={ user.name }
+              description={ `Joined ${date}` }
+            />
+          )
+        }
       </Card>
     </div>
   );

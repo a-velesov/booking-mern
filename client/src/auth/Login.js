@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LoginForm from '../components/LoginForm';
-import { login } from '../state/actions/auth';
-import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
+import { auth } from '../state/actions/auth';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Login = ({history}) => {
   const [ email, setEmail ] = useState('');
@@ -10,30 +9,17 @@ const Login = ({history}) => {
 
   const dispatch = useDispatch();
 
-  const handleSubmit = async(e) => {
+  const { authReducer } = useSelector((state) => ({ ...state }));
+  const { accessToken } = authReducer.data;
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      const res = await login({
-        email,
-        password,
-      });
-
-      if(res.data) {
-        localStorage.setItem('token', res.data.accessToken);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
-
-        dispatch({
-          type: 'LOGIN',
-          payload: res.data.accessToken,
-        })
-      }
-      history.push('/dashboard');
-    } catch(err) {
-      console.log(err, 'err client');
-      toast.error(err);
-    }
+    dispatch(auth({ email, password }));
   };
+
+  useEffect(() => {
+    if (accessToken) history.push('/dashboard');
+  }, [accessToken])
 
   return (
     <>

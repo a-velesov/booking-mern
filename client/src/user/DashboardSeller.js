@@ -3,12 +3,10 @@ import ConnectNav from '../components/ConnectNav';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { deleteHotel, sellerHotels } from '../state/actions/hotel';
-import { useSelector } from 'react-redux';
 import SmallCard from '../components/cards/SmallCard';
 import { toast } from 'react-toastify';
 
 const DashboardSeller = () => {
-  const { auth } = useSelector((state) => ({ ...state }));
   const [seller, setSeller] = useState([]);
 
   useEffect(() => {
@@ -16,14 +14,14 @@ const DashboardSeller = () => {
   }, []);
 
   const loadSellerHotels = async() => {
-    let { data } = await sellerHotels(auth.token);
+    let { data } = await sellerHotels();
     setSeller(data);
   };
 
   const handleHotelDelete = async(hotelId) => {
     if (!window.confirm('Are you sure?')) return;
-    deleteHotel(auth.token, hotelId)
-      .then((res) => {
+    deleteHotel(hotelId)
+      .then(() => {
         toast.success('Hotel Deleted');
         loadSellerHotels();
     })

@@ -1,10 +1,59 @@
 import $api from '../../axios';
+import { toast } from 'react-toastify';
 
-export const register = async (user) =>
-  await $api.post('/register', user);
+export const loginSuccess = (user) => ({
+    type: 'LOGIN',
+    payload: user,
+    error: null
+  }
+);
 
-export const login = async (user) =>
-  await $api.post('/login', user);
+export const logoutSuccess = () => ({
+    type: 'LOGOUT',
+    error: null
+  }
+);
 
-export const logout = async () =>
-  await $api.post('/logout');
+export const authFail = (error) => ({
+    type: 'AUTH_FAIL',
+    error,
+  }
+);
+
+export const auth = (userData) => (dispatch) => {
+  $api.post('/login', userData)
+      .then((res => {
+        localStorage.setItem('auth', JSON.stringify(res.data));
+        dispatch(loginSuccess(res.data));
+        toast.success('Login success');
+      }))
+      .catch((err) => {
+        localStorage.clear();
+        dispatch(authFail(err.message));
+        toast.error(err.message);
+      });
+};
+export const logout = () => (dispatch) => {
+  $api.post('/logout')
+      .then(() => {
+        localStorage.clear();
+        dispatch(logoutSuccess());
+        toast.success('Logout success');
+      })
+      .catch((err) => {
+        dispatch(authFail(err.message));
+      });
+};
+
+export const register = (userData) => (dispatch) => {
+  $api.post('/register', userData)
+      .then((res => {
+        console.log(res, 'res reg');
+        toast.success('Register success');
+      }))
+      .catch((err) => {
+        const valitateError = err.response.data.message.email || err.response.data.message.password || err.response.data.message;
+        dispatch(authFail(valitateError));
+        toast.error(valitateError);
+      });
+};

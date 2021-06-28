@@ -13,14 +13,15 @@ const ViewHotel = ({
   const [ image, setImage ] = useState({});
   const [ alreadyBooked, setAlreadyBooked ] = useState(false);
 
-  const { auth } = useSelector((state) => ({ ...state }));
+  const { authReducer } = useSelector((state) => ({ ...state }));
+  const { accessToken } = authReducer.data;
 
   useEffect(() => {
     loadSellerHotel();
   }, []);
 
   useEffect(() => {
-    if(auth) {
+    if(accessToken) {
       isAlreadyBooked(match.params.hotelId)
         .then(res => {
           if(res.data.ok) setAlreadyBooked(true);
@@ -37,7 +38,7 @@ const ViewHotel = ({
   const handleClick = (e) => {
     e.preventDefault();
 
-    if(!auth) {
+    if(!accessToken) {
       history.push('/login');
       return;
     }
@@ -95,7 +96,7 @@ const ViewHotel = ({
               {
                 alreadyBooked
                   ? 'Already Booked'
-                  : auth
+                  : accessToken
                   ? 'Book Now'
                   : 'Login to Book'
               }
