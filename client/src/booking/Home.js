@@ -17,7 +17,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="container-fluid bg-secondary p-5 text-center">
+      <div className="container-fluid bg-dark p-5 text-center">
         <h1>All hotels</h1>
       </div>
       <div className="container-fluid">

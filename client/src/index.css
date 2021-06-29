@@ -15,3 +15,8 @@ code {
 .pointer {
   cursor: pointer;
 }
+
+h1 {
+  color: white !important;
+}
+

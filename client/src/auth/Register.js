@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import RegisterForm from '../components/RegisterForm';
 import { register } from '../state/actions/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Register = ({ history }) => {
   const [ name, setName ] = useState('');
@@ -9,6 +9,8 @@ const Register = ({ history }) => {
   const [ password, setPassword ] = useState('');
 
   const dispatch = useDispatch();
+  const { authReducer } = useSelector((state) => ({ ...state }));
+  const { accessToken } = authReducer.data;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,12 +19,16 @@ const Register = ({ history }) => {
       email,
       password,
     }));
-
   };
+
+  useEffect(() => {
+    if (accessToken) history.push('/dashboard');
+  }, [accessToken])
+
   return (
     <>
-      <div className="container-fluid bg-secondary p-5 text-center">
-        <h1>Register Page</h1>
+      <div className="container-fluid bg-dark p-5 text-center">
+        <h1>Registration</h1>
       </div>
 
       <div className="container">

@@ -23,7 +23,7 @@ const Login = ({history}) => {
 
   return (
     <>
-      <div className="container-fluid bg-secondary p-5 text-center">
+      <div className="container-fluid bg-dark p-5 text-center">
         <h1>Login</h1>
       </div>
 

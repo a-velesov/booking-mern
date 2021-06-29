@@ -18,7 +18,7 @@ const EditHotel = ({ match }) => {
 
   return (
     <>
-      <div className="container-fluid bg-secondary p-5 text-center">
+      <div className="container-fluid bg-dark p-5 text-center">
         <h2>Edit Hotel</h2>
       </div>
       <div className="container-fluid">
