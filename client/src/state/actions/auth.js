@@ -45,11 +45,24 @@ export const logout = () => (dispatch) => {
       });
 };
 
+export const checkAuth = () => (dispatch) => {
+  $api.get('/refresh')
+    .then((res) => {
+      localStorage.setItem('auth', JSON.stringify(res.data));
+      dispatch(loginSuccess(res.data));
+    })
+    .catch((err) => {
+      localStorage.clear();
+      dispatch(authFail(err.message));
+    })
+}
+
 export const register = (userData) => (dispatch) => {
   $api.post('/register', userData)
       .then((res => {
-        console.log(res, 'res reg');
-        toast.success('Register success');
+        localStorage.setItem('auth', JSON.stringify(res.data));
+        dispatch(loginSuccess(res.data));
+        toast.success(`Register success. The activation link was sent to the email ${res.data.user.email}`);
       }))
       .catch((err) => {
         const valitateError = err.response.data.message.email || err.response.data.message.password || err.response.data.message;

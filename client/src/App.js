@@ -11,9 +11,19 @@ import DashboardSeller from './user/DashboardSeller';
 import NewHotel from './hotels/NewHotel';
 import EditHotel from './hotels/EditHotel';
 import ViewHotel from './hotels/ViewHotel';
-
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { checkAuth } from './state/actions/auth';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (localStorage.getItem('auth')) {
+      dispatch(checkAuth());
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <TopNav />
