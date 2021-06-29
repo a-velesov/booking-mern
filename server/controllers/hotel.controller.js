@@ -7,7 +7,7 @@ export const createHotel = async(req, res, next) => {
     let files = req.files;
 
     let hotel = new Hotel(fields);
-    hotel.postedBy = req.user._id;
+    hotel.postedBy = req.user.id;
 
     if(files.image) {
       hotel.image.data = fs.readFileSync(files.image.path);
@@ -48,7 +48,7 @@ export const image = async(req, res) => {
 };
 
 export const sellerHotels = async(req, res) => {
-  let all = await Hotel.find({ postedBy: req.user._id })
+  let all = await Hotel.find({ postedBy: req.user.id })
     .select('-image.data')
     .populate('postedBy', '_id name')
     .exec();

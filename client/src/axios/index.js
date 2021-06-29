@@ -16,7 +16,6 @@ $api.interceptors.response.use((config) => {
   return config;
 }, (error) => {
   const originalRequest = error.config;
-  console.log(originalRequest, 'origReq');
   if(error?.response?.status === 401 && originalRequest && !originalRequest._isRetry) {
     originalRequest._isRetry = true;
     axios.get(`${process.env.REACT_APP_API}/refresh`, {withCredentials: true})

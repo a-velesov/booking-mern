@@ -15,15 +15,18 @@ const ConnectNav = () => {
         {
           user && (
             <Meta
-              avatar={ <Avatar>{ user.name?.[0] }</Avatar> }
+              avatar={ <Avatar>{ user.name ? user.name?.[0].toUpperCase() : user.email?.[0].toUpperCase() }</Avatar> }
               title={
                 <>
                   <span>{ user.name }
-                  <small><mark> {user.isActivated ? ' Account activated' : ' Account not activated' } </mark></small>
+                    <small><mark> { user.isActivated ? ' Account activated' : ' Account not activated' } </mark></small>
                   </span>
+                  <div>
+                    <small>{ user.email }</small>
+                  </div>
                 </>
               }
-              description={`Joined ${ date }`}
+              description={ `Joined ${ date }` }
             />
           )
         }
