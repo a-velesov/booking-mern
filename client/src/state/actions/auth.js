@@ -1,5 +1,6 @@
 import $api from '../../axios';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 export const loginSuccess = (user) => ({
     type: 'LOGIN',
@@ -21,7 +22,7 @@ export const authFail = (error) => ({
 );
 
 export const auth = (userData) => (dispatch) => {
-  $api.post('/login', userData)
+  axios.post(`${process.env.REACT_APP_API}/login`, userData, {withCredentials: true})
       .then((res => {
         localStorage.setItem('auth', JSON.stringify(res.data));
         dispatch(loginSuccess(res.data));
@@ -58,7 +59,7 @@ export const checkAuth = () => (dispatch) => {
 }
 
 export const register = (userData) => (dispatch) => {
-  $api.post('/register', userData)
+  axios.post(`${process.env.REACT_APP_API}/register`, userData, {withCredentials: true})
       .then((res => {
         localStorage.setItem('auth', JSON.stringify(res.data));
         dispatch(loginSuccess(res.data));
