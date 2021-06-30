@@ -2,24 +2,26 @@ let initialState = {
   data: {
     accessToken: null,
     user: {
-      isActivated: true
-    }
+      isActivated: true,
+    },
   },
   error: null,
+  loading: false,
 };
 
-/*TODO loader*/
-/*
-if(localStorage.getItem('auth')) {
-  initialState.data = JSON.parse(localStorage.getItem('auth'));
-}*/
+const loading = (state, action) => {
+  return {
+    ...state,
+    loading: action.loading,
+  };
+};
 
 const authFail = (state, action) => {
   return {
     ...state,
     error: action.error,
   };
-}
+};
 
 const loginSuccess = (state, action) => {
   return {
@@ -27,7 +29,7 @@ const loginSuccess = (state, action) => {
     data: action.payload,
     error: null,
   };
-}
+};
 
 export const authReducer = (state = initialState, action) => {
   switch(action.type) {
@@ -35,6 +37,8 @@ export const authReducer = (state = initialState, action) => {
       return loginSuccess(state, action);
     case 'AUTH_FAIL':
       return authFail(state, action);
+    case 'LOADING':
+      return loading(state, action);
     case 'LOGOUT':
       return initialState;
     default:

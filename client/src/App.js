@@ -1,4 +1,4 @@
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
 import TopNav from './components/TopNav';
 import { ToastContainer } from 'react-toastify';
@@ -12,11 +12,14 @@ import NewHotel from './hotels/NewHotel';
 import EditHotel from './hotels/EditHotel';
 import ViewHotel from './hotels/ViewHotel';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth } from './state/actions/auth';
+import Spinner from './use/Spinner';
 
 function App() {
   const dispatch = useDispatch();
+  const { authReducer } = useSelector((state) => ({ ...state }));
+  const { loading } = authReducer;
 
   useEffect(() => {
     if (localStorage.getItem('auth')) {
@@ -26,6 +29,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      {loading ? (<Spinner />) : ''}
       <TopNav />
       <ToastContainer position="bottom-right" />
       <Switch>
